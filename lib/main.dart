@@ -74,6 +74,7 @@ class HomePage extends StatelessWidget {
       builder: (context, catService, child) {
         return Scaffold(
           appBar: AppBar(
+            iconTheme: IconThemeData(color: Colors.black),
             title: Text(
               "Random Cats",
               style:
@@ -83,7 +84,10 @@ class HomePage extends StatelessWidget {
             actions: [
               // 좋아요 페이지로 이동
               IconButton(
-                icon: Icon(Icons.favorite),
+                icon: Icon(
+                  Icons.favorite,
+                  color: Colors.pink,
+                ),
                 onPressed: () {
                   Navigator.push(
                     context,
@@ -147,8 +151,50 @@ class FavoritePage extends StatelessWidget {
       builder: (context, catService, child) {
         return Scaffold(
           appBar: AppBar(
-            title: Text("좋아요"),
+            iconTheme: IconThemeData(color: Colors.black),
+            title: Text(
+              "Hearts",
+              style:
+                  TextStyle(color: Colors.black, fontWeight: FontWeight.bold),
+            ),
             backgroundColor: Colors.white,
+          ),
+          body: GridView.count(
+            mainAxisSpacing: 8,
+            crossAxisSpacing: 8,
+            padding: EdgeInsets.all(8),
+            crossAxisCount: 2,
+            children: List.generate(
+              catService.heartImages.length,
+              (index) {
+                String catImage = catService.heartImages[index];
+                return GestureDetector(
+                  onTap: () {
+                    catService.toggleHeartImage(catImage);
+                  },
+                  child: Stack(
+                    children: [
+                      Positioned.fill(
+                        child: Image.network(
+                          catImage,
+                          fit: BoxFit.cover,
+                        ),
+                      ),
+                      Positioned(
+                        right: 8,
+                        bottom: 8,
+                        child: Icon(
+                          Icons.favorite,
+                          color: catService.heartImages.contains(catImage)
+                              ? Colors.pink
+                              : Colors.transparent,
+                        ),
+                      ),
+                    ],
+                  ),
+                );
+              },
+            ),
           ),
         );
       },
