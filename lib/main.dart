@@ -52,6 +52,10 @@ class CatService extends ChangeNotifier {
 
   CatService(this.prefs) {
     getRandomCatImages();
+
+    // hearts로 저장된 heartImages를 가져옵니다.
+    // 저장된 값이 없는 경우 null을 반환하므로 이때는 빈 배열을 넣어줍니다.
+    heartImages = prefs.getStringList("hearts") ?? [];
   }
 
   // 랜덤 고양이 사진 API 호출
@@ -71,6 +75,9 @@ class CatService extends ChangeNotifier {
     } else {
       heartImages.add(catImage); // 종아요를 안 한 경우
     }
+
+    // heartImages를 hearts라는 이름으로 저장하기
+    prefs.setStringList("hearts", heartImages);
     notifyListeners();
   }
 }
