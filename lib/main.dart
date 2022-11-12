@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
+// 배운점
+// GridView.count()를 통해 그리드 형식으로 요소 배치
+
 void main() {
   runApp(
     MultiProvider(
