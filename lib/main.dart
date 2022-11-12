@@ -3,16 +3,24 @@ import 'dart:async';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 // 배운점
 // GridView.count()를 통해 그리드 형식으로 요소 배치
 // notifyListeners로 Consumer 이하를 새로 호출 (새로고침 기능)
+// 메인(main)에서 async를 쓰려면 WidgetsFlutterBinding.ensureInitialized(); 을 써야 함
 
-void main() {
+void main() async {
+  // main() 함수에서 async를 쓰려면 필요
+  WidgetsFlutterBinding.ensureInitialized();
+
+  // shared_preferences 인스턴스 생성
+  SharedPreferences prefs = await SharedPreferences.getInstance();
+
   runApp(
     MultiProvider(
       providers: [
-        ChangeNotifierProvider(create: (context) => CatService()),
+        ChangeNotifierProvider(create: (context) => CatService(prefs)),
       ],
       child: const MyApp(),
     ),
@@ -39,7 +47,10 @@ class CatService extends ChangeNotifier {
   // 종아요 사진 담을 변수
   List<String> heartImages = [];
 
-  CatService() {
+  // SharedPreferences 인스턴스
+  SharedPreferences prefs;
+
+  CatService(this.prefs) {
     getRandomCatImages();
   }
 
